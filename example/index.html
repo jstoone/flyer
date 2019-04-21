@@ -14,9 +14,14 @@
     <body>
         <div id="flyer"></div>
 
-        <script src="/dist/manifest.js"></script>
-        <script src="/dist/vendor.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/pixi.js/5.0.0-rc.3/pixi.min.js"></script>
+        <script src="//cdn.jsdelivr.net/npm/animejs@3.0.1/lib/anime.min.js"></script>
         <script src="/dist/flyer.js"></script>
         <script src="/example/banner.js"></script>
+        <script>
+            window.addEventListener('load', function() {
+                (new Flyer).init();
+            });
+        </script>
     </body>
 </html>
