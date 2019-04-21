@@ -10,9 +10,7 @@ let mix = require('laravel-mix');
  | file for your application, as well as bundling up your JS files.
  |
  */
-
-mix.js('src/index.js', 'dist/flyer.js')
-    .extract()
+mix.babel('src/index.js', 'dist/flyer.js')
     .setPublicPath('dist');
 
 // Full API
