@@ -1,7 +1,7 @@
-class Flyer
-{
-    constructor()
-    {
+class Flyer {
+    constructor() {
+        this.banner = new Banner();
+
         this.config = {
             width: 930,
             height: 180,
@@ -9,34 +9,34 @@ class Flyer
             containerSelector: '#flyer',
             backgroundColor: 0xe3e3e3,
             transparent: false,
-        }
+            ...this.banner.config
+        };
 
-        this.banner    = new Banner();
-        this.loader    = PIXI.Loader.shared;
-        this.renderer  = new PIXI.Application(this.config);
+        this.loader = PIXI.Loader.shared;
+        this.renderer = new PIXI.Application(this.config);
         this.container = document.querySelector(this.config.containerSelector);
 
-        this.banner.core    = this;
-        this.banner.stage   = this.renderer.stage;
+        this.banner.assets = {};
+        this.banner.core = this;
+        this.banner.stage = this.renderer.stage;
         this.loader.baseUrl = 'images/';
     }
 
-    init()
-    {
-        this.loader
-            .add(this.banner.loadQueue)
-            .load((loader, resources) => {
-                this.assetsLoaded(resources);
-            });
+    init() {
+        if (!this.banner.loadQueue) {
+            this.prepareStage();
+
+            return;
+        }
+
+        this.loader.add(this.banner.loadQueue).load((loader, resources) => {
+            this.assetsLoaded(resources);
+        });
     }
 
-    assetsLoaded(resources)
-    {
+    assetsLoaded(resources) {
         // Convert downloaded resources into sprites
         var resources = this.prepareResources(resources) || {};
-
-        // Add the canvas to the document
-        this.container.appendChild(this.renderer.view);
 
         // Set the assets for the main banner
         this.banner.assets = resources;
@@ -45,14 +45,18 @@ class Flyer
         this.prepareStage();
     }
 
-    prepareStage()
-    {
+    prepareStage() {
+        // Add the canvas to the document
+        this.container.appendChild(this.renderer.view);
+
+        // Initialize banner
         this.banner.init();
+
+        // Start banner animation
         this.banner.start();
     }
 
-    prepareResources(resources)
-    {
+    prepareResources(resources) {
         const finalAssets = {};
 
         for (var key in resources) {
@@ -60,11 +64,11 @@ class Flyer
             const hasExtension = key.indexOf('.') >= 0;
 
             // skip loop if the property is from prototype
-            if ( ! resources.hasOwnProperty(key)) {
+            if (!resources.hasOwnProperty(key)) {
                 continue;
             }
 
-            if(hasExtension) {
+            if (hasExtension) {
                 key = key.split('.')[0];
             }
 
