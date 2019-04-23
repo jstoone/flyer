@@ -54,6 +54,11 @@ class Flyer {
 
         // Start banner animation
         this.banner.start();
+
+        // Subscribe to renderer tick events
+        if (this.banner.render) {
+            this.renderer.ticker.add(this.banner.render.bind(this.banner));
+        }
     }
 
     prepareResources(resources) {

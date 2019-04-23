@@ -96,7 +96,11 @@ var Flyer = (function() {
                 value: function() {
                     this.container.appendChild(this.renderer.view),
                         this.banner.init(),
-                        this.banner.start();
+                        this.banner.start(),
+                        this.banner.render &&
+                            this.renderer.ticker.add(
+                                this.banner.render.bind(this.banner)
+                            );
                 }
             },
             {
